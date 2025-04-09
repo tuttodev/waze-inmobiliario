@@ -1,0 +1,11 @@
+[{
+  "id": "11812c7c-ac53-4a3b-80a6-db417063da38",
+  "lat": 20,
+  "lng": 20,
+  "phone": "+57 23423423424",
+  "photoUrl": "https://example.com/photo.jpg",
+  "publishedBy": "570ce4d1-587d-4042-bf0f-76a2afd6f7b0",
+  "description": "A beautiful house in the city center.",
+  "interestedPeopleCount": 3,
+  "published": true
+}]
