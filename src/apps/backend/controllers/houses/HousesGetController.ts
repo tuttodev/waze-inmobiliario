@@ -5,14 +5,18 @@ import {HousesGetter} from "@/features/get_houses/application/HousesGetter";
 import {InMemoryHouseRepository} from "@/features/shared/infrastructure/in_memory/InMemoryHouseRepository";
 import {InMemoryUserRepository} from "@/features/shared/infrastructure/in_memory/InMemoryUserRepository";
 import {UserGetter} from "@/features/shared/domain/UserGetter";
+import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
+import {PostgresDrizzleUserRepository} from "@shared/infrastructure/PostgresDrizzleUserRepository";
 
 export default class HousesGetController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
         try {
             const userId = req.query.userId as string;
 
-            const repository = new InMemoryHouseRepository()
-            const userRepository = new InMemoryUserRepository()
+            // const repository = new InMemoryHouseRepository()
+            // const userRepository = new InMemoryUserRepository()
+            const repository = new PostgresDrizzleHouseRepository()
+            const userRepository = new PostgresDrizzleUserRepository()
             const userGetter = new UserGetter(userRepository)
 
             const useCase = new HousesGetter(repository, userGetter)

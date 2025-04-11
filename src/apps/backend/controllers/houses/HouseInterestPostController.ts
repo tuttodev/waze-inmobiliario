@@ -5,6 +5,8 @@ import {InMemoryHouseRepository} from "@/features/shared/infrastructure/in_memor
 import {HouseInterestMarker} from "@/features/mark_interest_houses/application/HouseInterestMarker";
 import {InMemoryUserRepository} from "@/features/shared/infrastructure/in_memory/InMemoryUserRepository";
 import {UserGetter} from "@/features/shared/domain/UserGetter";
+import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
+import {PostgresDrizzleUserRepository} from "@shared/infrastructure/PostgresDrizzleUserRepository";
 
 export default class HousesInterestPostController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -12,8 +14,10 @@ export default class HousesInterestPostController implements Controller {
             const { houseId } = req.params as Record<string, string>;
             const { userId } = req.query as Record<string, string>;
 
-            const houseRepository = new InMemoryHouseRepository()
-            const userRepository = new InMemoryUserRepository()
+            // const houseRepository = new InMemoryHouseRepository()
+            // const userRepository = new InMemoryUserRepository()
+            const houseRepository = new PostgresDrizzleHouseRepository()
+            const userRepository = new PostgresDrizzleUserRepository()
             const userGetter = new UserGetter(userRepository)
 
             const useCase = new HouseInterestMarker(houseRepository, userRepository, userGetter);

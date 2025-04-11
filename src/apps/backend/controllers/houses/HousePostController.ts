@@ -6,6 +6,8 @@ import {InMemoryHousePhotoRepository} from "@/features/shared/infrastructure/in_
 import {HousePublisher} from "@/features/publish_houses/application/HousePublisher";
 import type {UploadedFile} from "express-fileupload";
 import {File} from '@/features/shared/domain/File'
+import {S3HousePhotoRepository} from "@shared/infrastructure/S3HousePhotoRepository";
+import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
 
 export default class HousesPostController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -22,8 +24,10 @@ export default class HousesPostController implements Controller {
             } = body;
             const { userId } = query
 
-            const photoRepository = new InMemoryHousePhotoRepository()
-            const houseRepository = new InMemoryHouseRepository()
+            // const photoRepository = new InMemoryHousePhotoRepository()
+            // const houseRepository = new InMemoryHouseRepository()
+            const photoRepository = new S3HousePhotoRepository()
+            const houseRepository = new PostgresDrizzleHouseRepository()
 
             const useCase = new HousePublisher(houseRepository, photoRepository);
             await useCase.run({

@@ -6,3 +6,5 @@ dist
 combined.log
 coverage
 .tmp
+/localstack
+/volume

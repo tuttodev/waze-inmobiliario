@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  waze_inmobiliario_db:
+    image: postgres:15
+    restart: always
+    container_name: waze_inmobiliario_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: waze_inmobiliario
+    ports:
+      - "2506:5432"
+    volumes:
+      - pg_data_waze_inmobiliario:/var/lib/postgresql/data
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    volumes:
+      - './docker/volumes/s3-storage/.init/buckets.sh:/etc/localstack/init/ready.d/buckets.sh'
+      - '${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+volumes:
+  pg_data_waze_inmobiliario:
