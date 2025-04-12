@@ -1,0 +1,36 @@
+
+### get all houses
+GET https://c31l5dfq70.execute-api.us-east-1.amazonaws.com/pdn/v1/houses?userId=9b3fe93d-22e4-4e91-a354-b677b7bc6186
+
+### publish house
+POST https://c31l5dfq70.execute-api.us-east-1.amazonaws.com/pdn/v1/houses?userId=9b3fe93d-22e4-4e91-a354-b677b7bc6186
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="lat"
+
+6.2442
+--WebAppBoundary
+Content-Disposition: form-data; name="lng"
+
+-75.5812
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+Casa en la Estrella pero me parece muy escondida
+--WebAppBoundary
+Content-Disposition: form-data; name="phone"
+
++573001234567
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="casa.jpg"
+Content-Type: image/jpeg
+
+< ./casa.jpg
+--WebAppBoundary--
+
+### unpublish house
+DELETE https://c31l5dfq70.execute-api.us-east-1.amazonaws.com/pdn/v1/houses/11812c7c-ac53-4a3b-80a6-db417063da38?userId=570ce4d1-587d-4042-bf0f-76a2afd6f7b0&reason=No me gusta
+
+### mark house as interested
+POST https://c31l5dfq70.execute-api.us-east-1.amazonaws.com/pdn/v1/houses/11812c7c-ac53-4a3b-80a6-db417063da38/interest?userId=9b3fe93d-22e4-4e91-a354-b677b7bc6186

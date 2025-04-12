@@ -10,9 +10,8 @@ export class BackendApp {
         await this.server.listen();
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- The response type is very large
     get httpServer() {
-        return this.server?.getHTTPServer();
+        return this.server!.getHTTPServer()!;
     }
 
     async stop(): Promise<void> {

@@ -5,17 +5,19 @@ import type * as http from 'http';
 import httpStatus from 'http-status';
 import fileUpload from 'express-fileupload';
 import { registerRoutes } from './routes';
+import morgan from 'morgan';
 
 export class Server {
     private readonly express: express.Express;
     private readonly port: string;
     private httpServer?: http.Server;
 
-    constructor(port: string) {
-        this.port = port;
+    constructor(port?: string) {
+        this.port = port ?? '2403';
         this.express = express();
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: true }));
+        this.express.use(morgan('tiny'))
         this.express.use(fileUpload() as never);
         const router = Router();
         this.express.use('/v1', router);
@@ -40,9 +42,8 @@ export class Server {
         });
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- The response type is very large
-    getHTTPServer() {
-        return this.httpServer;
+    getHTTPServer(): express.Express {
+        return this.express;
     }
 
     async stop(): Promise<void> {

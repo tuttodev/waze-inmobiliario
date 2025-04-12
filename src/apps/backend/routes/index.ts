@@ -1,13 +1,8 @@
 import type { Router } from 'express';
-import { globSync } from 'glob';
+import { register as StatusRegister } from './status.route'
+import { register as HousesRegister } from './houses.route'
 
 export function registerRoutes(router: Router): void {
-    const routes = globSync(__dirname + '/**/*.route.*');
-    routes.forEach(route => { register(route, router); });
-}
-
-function register(routePath: string, router: Router): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- This is a dynamic require
-    const route = require(routePath);
-    route.register(router);
+    StatusRegister(router);
+    HousesRegister(router);
 }
