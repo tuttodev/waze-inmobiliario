@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import type { Controller } from '../Controller';
-import {InMemoryHouseRepository} from "@/features/shared/infrastructure/in_memory/InMemoryHouseRepository";
 import {HouseUnPublisher} from "@/features/unpublish_houses/application/HouseUnPublisher";
 import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
 
@@ -11,7 +10,6 @@ export default class HousesDeleteController implements Controller {
             const query = req.query as Record<string, string>;
             const params = req.params as Record<string, string>;
 
-            // const houseRepository = new InMemoryHouseRepository()
             const houseRepository = new PostgresDrizzleHouseRepository()
 
             const useCase = new HouseUnPublisher(houseRepository);

@@ -1,8 +1,6 @@
 import type { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import type { Controller } from '../Controller';
-import {InMemoryHouseRepository} from "@/features/shared/infrastructure/in_memory/InMemoryHouseRepository";
-import {InMemoryHousePhotoRepository} from "@/features/shared/infrastructure/in_memory/InMemoryPhotoRepository";
 import {HousePublisher} from "@/features/publish_houses/application/HousePublisher";
 import type {UploadedFile} from "express-fileupload";
 import {File} from '@/features/shared/domain/File'
@@ -24,8 +22,6 @@ export default class HousesPostController implements Controller {
             } = body;
             const { userId } = query
 
-            // const photoRepository = new InMemoryHousePhotoRepository()
-            // const houseRepository = new InMemoryHouseRepository()
             const photoRepository = new S3HousePhotoRepository()
             const houseRepository = new PostgresDrizzleHouseRepository()
 
