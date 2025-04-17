@@ -6,6 +6,12 @@ import type {UploadedFile} from "express-fileupload";
 import {File} from '@/features/shared/domain/File'
 import {S3HousePhotoRepository} from "@shared/infrastructure/S3HousePhotoRepository";
 import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
+import {
+    OllamaDeepSeekFunnyPhrasePublishHouseGenerator
+} from "@/features/publish_houses/infrastructure/OllamaDeepSeekFunnyPhrasePublishHouseGenerator";
+import {
+    OpenAIGPT3FunnyPhrasePublishHouseGenerator
+} from "@/features/publish_houses/infrastructure/OpenAIGPT3FunnyPhrasePublishHouseGenerator";
 
 export default class HousesPostController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -24,9 +30,10 @@ export default class HousesPostController implements Controller {
 
             const photoRepository = new S3HousePhotoRepository()
             const houseRepository = new PostgresDrizzleHouseRepository()
+            const funnyPhrasePublishHouseGenerator = new OpenAIGPT3FunnyPhrasePublishHouseGenerator()
 
-            const useCase = new HousePublisher(houseRepository, photoRepository);
-            await useCase.run({
+            const useCase = new HousePublisher(houseRepository, photoRepository, funnyPhrasePublishHouseGenerator);
+            const response = await useCase.run({
                 lat: Number(lat),
                 lng: Number(lng),
                 file: File.create(
@@ -39,8 +46,11 @@ export default class HousesPostController implements Controller {
                 publishedBy: userId
             })
 
-            res.sendStatus(httpStatus.CREATED)
+            res.status(httpStatus.CREATED).json({
+                phrase: response
+            })
         } catch (error) {
+            console.log(error);
             if (error instanceof Error) {
                 res.status(httpStatus.BAD_REQUEST).json({
                     message: error.message

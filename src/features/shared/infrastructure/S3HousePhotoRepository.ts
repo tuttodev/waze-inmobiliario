@@ -11,7 +11,8 @@ export class S3HousePhotoRepository implements HousePhotoRepository {
 
         this.client = new S3Client({
             region: process.env.AWS_REGION,
-            endpoint: process.env.S3_ENDPOINT
+            endpoint: process.env.S3_ENDPOINT,
+            forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
         });
     }
 
