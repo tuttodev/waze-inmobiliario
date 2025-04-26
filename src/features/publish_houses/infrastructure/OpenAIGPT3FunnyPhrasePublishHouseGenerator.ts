@@ -1,5 +1,5 @@
-import OpenAI from "openai";
 import {FunnyPhrasePublishHouseGenerator} from "@/features/publish_houses/domain/FunnyPhrasePublishHouseGenerator";
+import OpenAI from "openai";
 
 export class OpenAIGPT3FunnyPhrasePublishHouseGenerator implements FunnyPhrasePublishHouseGenerator {
     private readonly client: OpenAI;
@@ -18,7 +18,6 @@ La frase debe ser divertida, algo exagerada, con un estilo vaquero juguetón, co
     }
 
     async generate(description: string, phone: string, lat: number, lng: number): Promise<string> {
-
         const prompt = this.prompt.replace('*{data}*', `
 - 📍 Latitud: ${lat}
 - 📍 Longitud: ${lng}
@@ -33,5 +32,4 @@ La frase debe ser divertida, algo exagerada, con un estilo vaquero juguetón, co
 
         return response.output_text;
     }
-
 }

@@ -1,5 +1,5 @@
-import OpenAI from "openai";
 import {FunnyPhrasePublishHouseGenerator} from "@/features/publish_houses/domain/FunnyPhrasePublishHouseGenerator";
+import OpenAI from "openai";
 
 export class OllamaDeepSeekFunnyPhrasePublishHouseGenerator implements FunnyPhrasePublishHouseGenerator {
     private readonly client: OpenAI;
@@ -20,8 +20,8 @@ La frase debe ser divertida, algo exagerada, con un estilo vaquero juguetón, co
         });
     }
 
-    async generate(description: string, phone: string, lat: number, lng: number): Promise<string> {
 
+    async generate(description: string, phone: string, lat: number, lng: number): Promise<string> {
         const prompt = this.prompt.replace('*{data}*', `
 - 📍 Latitud: ${lat}
 - 📍 Longitud: ${lng}
@@ -30,9 +30,9 @@ La frase debe ser divertida, algo exagerada, con un estilo vaquero juguetón, co
         `)
 
         const response = await this.client.completions.create({
-            model: "deepseek-r1:7b",
-            prompt: prompt,
-        });
+            model: 'deepseek-r1:7b',
+            prompt
+        })
 
         const raw = response.choices[0].text.trim();
         const cleaned = raw.includes("</think>")
@@ -40,6 +40,6 @@ La frase debe ser divertida, algo exagerada, con un estilo vaquero juguetón, co
             : raw;
 
         return cleaned;
-    }
 
+    }
 }

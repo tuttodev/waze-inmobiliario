@@ -2,9 +2,7 @@ import type { HouseRepository } from '@/features/shared/domain/HouseRepository';
 import { House } from '@/features/shared/domain/House';
 import type {HousePhotoRepository} from "@/features/shared/domain/HousePhotoRepository";
 import type {File} from '@/features/shared/domain/File'
-import {
-    FunnyPhrasePublishHouseGenerator
-} from "@/features/publish_houses/domain/FunnyPhrasePublishHouseGenerator";
+import {FunnyPhrasePublishHouseGenerator} from "@/features/publish_houses/domain/FunnyPhrasePublishHouseGenerator";
 
 interface Input {
     lat: number;
@@ -19,8 +17,7 @@ export class HousePublisher {
     constructor(
         private readonly houseRepository: HouseRepository,
         private readonly housePhotoRepository: HousePhotoRepository,
-        private readonly funnyPhrasePublishHouseGenerator: FunnyPhrasePublishHouseGenerator
-    ) {}
+        private readonly funnyPhrasePublishHouseGenerator: FunnyPhrasePublishHouseGenerator) {}
 
     async run(input: Input): Promise<string> {
         if (!input.lat|| !input.lng || !input.description || !input.phone) {
@@ -40,6 +37,6 @@ export class HousePublisher {
             house.phone,
             house.lat,
             house.lng
-        );
+        )
     }
 }
