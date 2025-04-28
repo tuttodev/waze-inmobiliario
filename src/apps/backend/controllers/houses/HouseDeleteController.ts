@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import type { Controller } from '../Controller';
 import {HouseUnPublisher} from "@/features/unpublish_houses/application/HouseUnPublisher";
 import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
+import {drizzle} from "drizzle-orm/node-postgres";
 
 export default class HousesDeleteController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -10,7 +11,8 @@ export default class HousesDeleteController implements Controller {
             const query = req.query as Record<string, string>;
             const params = req.params as Record<string, string>;
 
-            const houseRepository = new PostgresDrizzleHouseRepository()
+            const dbClient = drizzle(process.env.DATABASE_URL!);
+            const houseRepository = new PostgresDrizzleHouseRepository(dbClient)
 
             const useCase = new HouseUnPublisher(houseRepository);
             await useCase.run({

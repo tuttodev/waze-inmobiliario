@@ -1,16 +1,12 @@
 import {HouseRepository} from "@/features/shared/domain/HouseRepository";
 import {House} from "@/features/shared/domain/House";
-import {drizzle, NodePgDatabase} from 'drizzle-orm/node-postgres';
+import {NodePgDatabase} from 'drizzle-orm/node-postgres';
 import {houses, interests} from '@drizzleConfig/schema'
 import { eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 
 export class PostgresDrizzleHouseRepository implements HouseRepository {
-    private readonly db: NodePgDatabase
-
-    constructor() {
-        this.db = drizzle(process.env.DATABASE_URL!);
-    }
+    constructor(private readonly db: NodePgDatabase) {}
 
     async get(id: string): Promise<House | null> {
         const housesFound = await this.db.select().from(houses).where(

@@ -5,6 +5,7 @@ import {HouseInterestMarker} from "@/features/mark_interest_houses/application/H
 import {UserGetter} from "@/features/shared/domain/UserGetter";
 import {PostgresDrizzleHouseRepository} from "@shared/infrastructure/PostgresDrizzleHouseRepository";
 import {PostgresDrizzleUserRepository} from "@shared/infrastructure/PostgresDrizzleUserRepository";
+import {drizzle} from "drizzle-orm/node-postgres";
 
 export default class HousesInterestPostController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -12,7 +13,8 @@ export default class HousesInterestPostController implements Controller {
             const { houseId } = req.params as Record<string, string>;
             const { userId } = req.query as Record<string, string>;
 
-            const houseRepository = new PostgresDrizzleHouseRepository()
+            const dbClient = drizzle(process.env.DATABASE_URL!);
+            const houseRepository = new PostgresDrizzleHouseRepository(dbClient)
             const userRepository = new PostgresDrizzleUserRepository()
 
             const userGetter = new UserGetter(userRepository)

@@ -3,17 +3,10 @@ import { S3Client, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/clie
 import { File } from '@shared/domain/File';
 
 export class S3HousePhotoRepository implements HousePhotoRepository {
-    private readonly client: S3Client;
-    private readonly bucket: string;
-
-    constructor() {
-        this.bucket = process.env.S3_BUCKET!;
-
-        this.client = new S3Client({
-            region: process.env.AWS_REGION,
-            endpoint: process.env.S3_ENDPOINT,
-            forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
-        });
+    constructor(
+        private readonly client: S3Client,
+        private readonly bucket: string
+    ) {
     }
 
     async upload(file: File): Promise<{ path: string }> {

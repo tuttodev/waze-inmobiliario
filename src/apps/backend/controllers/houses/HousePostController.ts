@@ -12,6 +12,8 @@ import {
 import {
     OpenAIGPT3FunnyPhrasePublishHouseGenerator
 } from "@/features/publish_houses/infrastructure/OpenAIGPT3FunnyPhrasePublishHouseGenerator";
+import {drizzle} from "drizzle-orm/node-postgres";
+import {S3Client} from "@aws-sdk/client-s3";
 
 export default class HousesPostController implements Controller {
     async run(req: Request, res: Response): Promise<void> {
@@ -28,8 +30,15 @@ export default class HousesPostController implements Controller {
             } = body;
             const { userId } = query
 
-            const photoRepository = new S3HousePhotoRepository()
-            const houseRepository = new PostgresDrizzleHouseRepository()
+            const dbClient = drizzle(process.env.DATABASE_URL!);
+            const s3Client = new S3Client({
+                region: process.env.AWS_REGION,
+                endpoint: process.env.S3_ENDPOINT,
+                forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'true',
+            });
+            const bucket = process.env.S3_BUCKET!;
+            const photoRepository = new S3HousePhotoRepository(s3Client, bucket)
+            const houseRepository = new PostgresDrizzleHouseRepository(dbClient)
             const funnyPhrasePublishHouseGenerator = new OpenAIGPT3FunnyPhrasePublishHouseGenerator()
 
             const useCase = new HousePublisher(houseRepository, photoRepository, funnyPhrasePublishHouseGenerator);
